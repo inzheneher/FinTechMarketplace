@@ -1,17 +1,19 @@
 plugins {
     id("java")
+    id("org.springframework.boot") version "2.7.0" apply false
+    id("io.spring.dependency-management") version "1.0.11.RELEASE" apply false
 }
 
-repositories {
-    mavenCentral()
-}
+subprojects {
+    repositories {
+        mavenCentral()
+    }
 
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
-}
+    apply(plugin = "java")
+    apply(plugin = "org.springframework.boot")
+    apply(plugin = "io.spring.dependency-management")
 
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
-    sourceCompatibility = 22
-    targetCompatibility = 22
+    dependencies {
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    }
 }
