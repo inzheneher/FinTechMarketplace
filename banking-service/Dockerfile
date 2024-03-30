@@ -1,0 +1,4 @@
+FROM postgres:latest
+ENV POSTGRES_USER banker
+ENV POSTGRES_PASSWORD banker
+ENV POSTGRES_DB bank
