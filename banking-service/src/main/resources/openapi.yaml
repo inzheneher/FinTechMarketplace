@@ -1,0 +1,139 @@
+openapi: 3.1.0
+info:
+  title: Banking Service
+  version: 1.0.0
+  description: Banking Service API
+paths:
+  /accounts:
+    post:
+      summary: Create a new account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerName:
+                  type: string
+                email:
+                  type: string
+                ssn:
+                  type: string
+      responses:
+        '201':
+          description: Account created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accountId:
+                    type: string
+                  customerName:
+                    type: string
+                  email:
+                    type: string
+                  balance:
+                    type: number
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /accounts/{accountId}:
+    delete:
+      summary: Delete an account
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Account successfully deleted
+        '404':
+          description: Account not found
+  /accounts/{accountId}/deposit:
+    post:
+      summary: Deposit funds to an account
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+      responses:
+        '200':
+          description: Funds successfully deposited
+        '400':
+          description: Invalid request parameters
+        '404':
+          description: Account not found
+  /transactions:
+    post:
+      summary: Transfer funds between accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromAccountId:
+                  type: string
+                toAccountId:
+                  type: string
+                amount:
+                  type: number
+      responses:
+        '200':
+          description: Funds successfully transferred
+        '400':
+          description: Invalid request parameters
+        '404':
+          description: Account not found
+  /accounts/{accountId}/balance:
+    get:
+      summary: Get account balance
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+        '404':
+          description: Account not found
