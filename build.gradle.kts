@@ -15,5 +15,7 @@ subprojects {
 
     dependencies {
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+        testImplementation("org.projectlombok:lombok:1.18.32")
+        testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
     }
 }
