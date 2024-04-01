@@ -85,9 +85,7 @@ class AccountServiceTest {
 
         when(accountRepository.findById(eq(nonExistentAccountId))).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            accountService.deposit(nonExistentAccountId, depositAmount);
-        });
+        assertThrows(IllegalArgumentException.class, () -> accountService.deposit(nonExistentAccountId, depositAmount));
 
         verify(accountRepository, never()).save(any(Account.class));
     }
@@ -113,9 +111,7 @@ class AccountServiceTest {
 
         when(accountRepository.findById(eq(nonExistentAccountId))).thenReturn(Optional.empty());
 
-        assertThrows(IllegalArgumentException.class, () -> {
-            accountService.getBalance(nonExistentAccountId);
-        });
+        assertThrows(IllegalArgumentException.class, () -> accountService.getBalance(nonExistentAccountId));
 
         verify(accountRepository, times(1)).findById(eq(nonExistentAccountId));
     }
