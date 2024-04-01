@@ -10,12 +10,11 @@ subprojects {
     }
 
     apply(plugin = "java")
-    apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
 
     dependencies {
         testImplementation("org.projectlombok:lombok:1.18.32")
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
+        testImplementation("org.springframework.boot:spring-boot-starter-test:3.2.4")
         testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
     }
 }
