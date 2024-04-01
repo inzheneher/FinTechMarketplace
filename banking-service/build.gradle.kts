@@ -40,3 +40,7 @@ tasks.withType<JavaCompile> {
 tasks.withType<ProcessResources> {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+}

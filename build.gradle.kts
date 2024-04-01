@@ -14,8 +14,8 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
 
     dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
         testImplementation("org.projectlombok:lombok:1.18.32")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
         testAnnotationProcessor("org.projectlombok:lombok:1.18.32")
     }
 }
