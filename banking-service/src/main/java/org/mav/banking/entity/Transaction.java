@@ -30,5 +30,9 @@ public class Transaction {
     private LocalDateTime timestamp = LocalDateTime.now();
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
+
+    @Column(name = "message")
+    private String message;
 }
