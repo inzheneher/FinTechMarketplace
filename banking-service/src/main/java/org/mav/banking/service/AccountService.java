@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class AccountService {
 
-
     private final AccountRepository accountRepository;
 
     public AccountResponse createAccount(AccountCreateRequest request) {
