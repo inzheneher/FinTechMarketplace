@@ -1,8 +1,8 @@
 package org.mav.banking.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -16,11 +16,11 @@ public class Transaction {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "from_account_id", nullable = false)
+    @JoinColumn(name = "account_from_id", nullable = false)
     private Account fromAccount;
 
     @ManyToOne
-    @JoinColumn(name = "to_account_id", nullable = false)
+    @JoinColumn(name = "account_to_id", nullable = false)
     private Account toAccount;
 
     @Column(nullable = false, precision = 10, scale = 2)

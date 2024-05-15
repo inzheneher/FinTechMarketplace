@@ -21,9 +21,9 @@ public class TransactionController {
     @PostMapping("/transfer")
     public ResponseEntity<TransactionResponse> transfer(@RequestBody TransferRequest request) {
 
-        TransactionResponse transactionResponse = transactionService.transferFunds(request.getFromAccountId(), request.getToAccountId(), request.getAmount());
+        TransactionResponse transactionResponse = transactionService.transferFunds(request.fromAccountId(), request.toAccountId(), request.amount());
 
-        if (TransactionStatus.SUCCESS.equals(transactionResponse.getStatus()))
+        if (TransactionStatus.SUCCESS.equals(transactionResponse.status()))
             return ResponseEntity.ok(transactionResponse);
         else return ResponseEntity.badRequest().body(transactionResponse);
     }
