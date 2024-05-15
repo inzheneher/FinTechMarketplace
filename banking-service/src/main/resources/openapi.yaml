@@ -3,8 +3,10 @@ info:
   title: Banking Service
   version: 1.0.0
   description: Banking Service API
+servers:
+  - url: http://localhost:8080
 paths:
-  /accounts:
+  /api/v1/accounts/create:
     post:
       summary: Create a new account
       requestBody:
@@ -54,7 +56,7 @@ paths:
                 properties:
                   message:
                     type: string
-  /accounts/{accountId}:
+  /api/v1/accounts/delete/{accountId}:
     delete:
       summary: Delete an account
       parameters:
@@ -68,7 +70,7 @@ paths:
           description: Account successfully deleted
         '404':
           description: Account not found
-  /accounts/{accountId}/deposit:
+  /api/v1/accounts/deposit/{accountId}:
     post:
       summary: Deposit funds to an account
       parameters:
@@ -93,30 +95,7 @@ paths:
           description: Invalid request parameters
         '404':
           description: Account not found
-  /transactions:
-    post:
-      summary: Transfer funds between accounts
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                fromAccountId:
-                  type: string
-                toAccountId:
-                  type: string
-                amount:
-                  type: number
-      responses:
-        '200':
-          description: Funds successfully transferred
-        '400':
-          description: Invalid request parameters
-        '404':
-          description: Account not found
-  /accounts/{accountId}/balance:
+  /api/v1/accounts/balance/{accountId}:
     get:
       summary: Get account balance
       parameters:
@@ -135,5 +114,28 @@ paths:
                 properties:
                   balance:
                     type: number
+        '404':
+          description: Account not found
+  /transactions:
+    post:
+      summary: Transfer funds between api/v1/accounts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fromAccountId:
+                  type: string
+                toAccountId:
+                  type: string
+                amount:
+                  type: number
+      responses:
+        '200':
+          description: Funds successfully transferred
+        '400':
+          description: Invalid request parameters
         '404':
           description: Account not found
