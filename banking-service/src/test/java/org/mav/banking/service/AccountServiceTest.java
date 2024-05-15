@@ -11,9 +11,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,22 +27,37 @@ class AccountServiceTest {
     @Mock
     private AccountRepository accountRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @InjectMocks
     private AccountService accountService;
 
     @Test
     void createAccount() {
-        AccountCreateRequest request = new AccountCreateRequest("John Doe", "john.doe@example.com", "123-45-6789");
-        Account savedAccount = new Account(1L, "John Doe", "john.doe@example.com", "123-45-6789", BigDecimal.ZERO);
+        AccountCreateRequest request = new AccountCreateRequest(
+                "John Doe",
+                "john.doe@example.com",
+                "$ecretpa$$w0rd",
+                "123-45-6789");
+        Account savedAccount = new Account(
+                1L,
+                "John Doe",
+                "john.doe@example.com",
+                "$ecretpa$$w0rd",
+                "123-45-6789",
+                BigDecimal.ZERO,
+                Set.of());
         when(accountRepository.save(any(Account.class))).thenReturn(savedAccount);
+        when(passwordEncoder.encode(anyString())).thenReturn("$ecretpa$$w0rd");
 
         AccountResponse response = accountService.createAccount(request);
 
         assertNotNull(response);
-        assertEquals(savedAccount.getId(), response.getAccountId());
-        assertEquals(savedAccount.getCustomerName(), response.getCustomerName());
-        assertEquals(savedAccount.getEmail(), response.getEmail());
-        assertEquals(0, response.getBalance().compareTo(BigDecimal.ZERO));
+        assertEquals(savedAccount.getId(), response.accountId());
+        assertEquals(savedAccount.getUsername(), response.username());
+        assertEquals(savedAccount.getEmail(), response.email());
+        assertEquals(0, response.balance().compareTo(BigDecimal.ZERO));
 
         verify(accountRepository, times(1)).save(any(Account.class));
     }
@@ -61,14 +78,21 @@ class AccountServiceTest {
         BigDecimal depositAmount = BigDecimal.valueOf(100);
         BigDecimal expectedAmount = initAmount.add(depositAmount);
 
-        Account initAccount = new Account(accountId, "John Doe", "john.doe@example.com", "123-45-6789", initAmount);
+        Account initAccount = new Account(
+                accountId,
+                "John Doe",
+                "john.doe@example.com",
+                "$ecretpa$$w0rd",
+                "123-45-6789",
+                initAmount,
+                Set.of());
         when(accountRepository.findById(eq(accountId))).thenReturn(Optional.of(initAccount));
         when(accountRepository.save(any(Account.class))).thenAnswer(invocation -> invocation.getArgument(0));
         AccountResponse response = accountService.deposit(accountId, depositAmount);
 
         assertNotNull(response);
-        assertEquals(accountId, response.getAccountId());
-        assertEquals(0, expectedAmount.compareTo(response.getBalance()));
+        assertEquals(accountId, response.accountId());
+        assertEquals(0, expectedAmount.compareTo(response.balance()));
 
         verify(accountRepository, times(1)).save(any(Account.class));
 
@@ -94,14 +118,21 @@ class AccountServiceTest {
     void getBalance() {
         Long accountId = 1L;
         BigDecimal depositAmount = BigDecimal.valueOf(100);
-        Account account = new Account(accountId, "John Doe", "john.doe@example.com", "123-45-6789", depositAmount);
+        Account account = new Account(
+                accountId,
+                "John Doe",
+                "john.doe@example.com",
+                "$ecretpa$$w0rd",
+                "123-45-6789",
+                depositAmount,
+                Set.of());
 
         when(accountRepository.findById(eq(accountId))).thenReturn(Optional.of(account));
 
         BalanceResponse balanceResponse = accountService.getBalance(accountId);
 
         assertNotNull(balanceResponse);
-        assertEquals(0, depositAmount.compareTo(balanceResponse.getBalance()));
+        assertEquals(0, depositAmount.compareTo(balanceResponse.balance()));
         verify(accountRepository, times(1)).findById(eq(accountId));
     }
 
