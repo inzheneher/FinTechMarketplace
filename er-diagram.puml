@@ -1,0 +1,146 @@
+@startuml
+entity Users {
+    id : integer <PK>
+    --
+    username : varchar
+    email : varchar
+    password_hash : varchar
+    created_at : timestamp
+}
+
+entity Accounts {
+  id : integer <PK>
+  --
+  user_id : integer <FK>
+  account_type_id : integer <FK>
+  bank_id : integer <FK>
+  balance : money
+  created_at : timestamp
+}
+
+entity AccountTypes {
+  id : integer <PK>
+  --
+  name : varchar
+  description : text
+}
+
+entity Banks {
+  id : integer <PK>
+  --
+  name : varchar
+  address : text
+  created_at : timestamp
+}
+
+entity Transactions {
+  id : integer <PK>
+  --
+  account_from : integer <FK>
+  account_to : integer <FK>
+  amount : money
+  transaction_type_id : integer <FK>
+  status_id : integer <FK>
+  created_at : timestamp
+}
+
+entity TransactionTypes {
+  id : integer <PK>
+  --
+  name : varchar
+  description : text
+}
+
+entity TransactionStatuses {
+  id : integer <PK>
+  --
+  name : varchar
+  description : text
+}
+
+entity BankRoles {
+  id : integer <PK>
+  --
+  user_id : integer <FK>
+  role_id : integer <FK>
+  bank_id : integer <FK>
+}
+
+entity ShopRoles {
+  id : integer <PK>
+  --
+  user_id : integer <FK>
+  role_id : integer <FK>
+  shop_id : integer <FK>
+}
+
+entity Roles {
+  id : integer <PK>
+  --
+  name : varchar
+  description : text
+}
+
+entity Shops {
+  id : integer <PK>
+  --
+  name : varchar
+  address : text
+  created_at : timestamp
+}
+
+entity Purchases {
+  id : integer <PK>
+  --
+  user_from_id : integer <FK>
+  user_to_id : integer <FK>
+  product_id : integer <FK>
+  status_id : integer <FK>
+  price : money
+  quantity : integer
+  created_at : timestamp
+}
+
+entity Products {
+  id : integer <PK>
+  --
+  name : varchar
+  description : text
+  price : money
+  created_at : timestamp
+}
+
+entity PurchaseStatus {
+  id : integer <PK>
+  --
+  name : varchar
+  description : text
+}
+
+entity Warehouses {
+  id : integer <PK>
+  --
+  product_id : integer <FK>
+  quantity : integer
+  created_at : timestamp
+}
+
+Users ||--{ Accounts
+Users ||--{ BankRoles
+Users ||--{ ShopRoles
+Users ||--{ Purchases
+Users ||--{ Purchases
+Accounts ||--{ Transactions
+Accounts ||--{ Transactions
+Accounts }--|| AccountTypes
+Roles ||--{ BankRoles
+Roles ||--{ ShopRoles
+Banks ||--{ BankRoles
+Banks ||--{ Accounts
+Shops ||--{ ShopRoles
+Transactions }--|| TransactionTypes
+Transactions }--|| TransactionStatuses
+Purchases }--|| Products
+Purchases }--|| PurchaseStatus
+Warehouses ||--{ Products
+@enduml
